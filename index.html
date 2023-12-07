@@ -6,6 +6,163 @@
     <title>Movie Database</title>
 </head>
 <body>
-    
+    <form action="">
+        <img src="image/search.png" alt="search icon">
+        <input type="text" placeholder="Search for a movie, tv show, person...." id="search-input">
+    </form>
+
+    <div class="search-results">
+        <div class="search-result">
+            <img src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/xj35Wq2NgSiHFZ5XTEaY3EtMHkE.jpg" alt="Two broke girls">
+            <div class="left-wrapper">
+                <a href="https://www.themoviedb.org/tv/39340-2-broke-girls" target="_blank">2 Broke Girls</a>
+                <p class="date">September 19, 2011</p>
+                <p class="subhead">
+                    Comedy about the unlikely friendship that develops between two very different young women who 
+                    meet waitressing at a diner in trendy Williamsburg, Brooklyn, and form a bond over one day 
+                    owning their own successful cupcake business. Only one thing
+                </p>
+            </div>
+        </div>
+        <div class="search-result">
+            <img src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/xj35Wq2NgSiHFZ5XTEaY3EtMHkE.jpg" alt="Two broke girls">
+            <div class="left-wrapper">
+                <a href="https://www.themoviedb.org/tv/39340-2-broke-girls" target="_blank">2 Broke Girls</a>
+                <p class="date">September 19, 2011</p>
+                <p class="subhead">
+                    Comedy about the unlikely friendship that develops between two very different young women who 
+                    meet waitressing at a diner in trendy Williamsburg, Brooklyn, and form a bond over one day 
+                    owning their own successful cupcake business. Only one thing
+                </p>
+            </div>
+        </div>
+        <div class="search-result">
+            <img src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/xj35Wq2NgSiHFZ5XTEaY3EtMHkE.jpg" alt="Two broke girls">
+            <div class="left-wrapper">
+                <a href="https://www.themoviedb.org/tv/39340-2-broke-girls" target="_blank">2 Broke Girls</a>
+                <p class="date">September 19, 2011</p>
+                <p class="subhead">
+                    Comedy about the unlikely friendship that develops between two very different young women who 
+                    meet waitressing at a diner in trendy Williamsburg, Brooklyn, and form a bond over one day 
+                    owning their own successful cupcake business. Only one thing
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            font-family: 'poppins', sans-serif;
+        }
+
+        form{
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        #search-input{
+            display: block;
+            width: 100%;
+            outline: none;
+            border: none;
+        }
+
+        form img{
+            width: 16px;
+        }
+
+        .search-results{
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-result{
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 32px;
+            border-radius: 5px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        .search-result img{
+            width: 10%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .search-result a{
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        .date{
+            margin-top: 5px;
+            margin-bottom: 16px;
+            color: #ccc;
+        }
+
+    </style>
+
+    <script>
+        const accessKey = "c5e7c4a657ff4c42a0a9bc108f559a2a";
+        const formEl = document.querySelector("form");
+        const inputEl = document.getElementById("search-input");
+        const searchResult = document.querySelector(".search-results");
+
+        let inputData = "";
+
+        async function searchMovies() {
+            inputData = inputEl.value;
+            const searchQuery = encodeURIComponent(inputData); // Ensure the search query is properly encoded
+
+            const url = `https://api.themoviedb.org/3/search/movie?api_key=${accessKey}&language=en-US&query=${searchQuery}&page=1`;
+
+
+            const response = await fetch(url);
+            const data = await response.json();
+            const results = data.results;
+
+            searchResult.innerHTML = "";
+
+            results.map((result) => {
+                const movieWrapper = document.createElement("div");
+                movieWrapper.classList.add("search-result");
+                const image = document.createElement("img");
+                image.src = `https://image.tmdb.org/t/p/w500/${result.poster_path}`;
+                image.alt = result.alt_description;
+                const detailWrapper = document.createElement("div");
+                detailWrapper.classList.add("left-wrapper");
+                const movieLink = document.createElement("a");
+                movieLink.href = `https://www.themoviedb.org/movie/${result.id}`;
+                movieLink.target = "_blank";
+                movieLink.textContent = result.title;
+                const movieDate = document.createElement("p");
+                movieDate.classList.add("date");
+                movieDate.textContent = result.release_date;
+                const movieDetails = document.createElement("p");
+                movieDetails.classList.add("subhead");
+                movieDetails.textContent = result.overview;
+
+
+                movieWrapper.append(image, detailWrapper);
+                detailWrapper.append(movieLink, movieDate, movieDetails);
+                searchResult.appendChild(movieWrapper);
+            })
+        }
+
+        formEl.addEventListener("submit", (event) => {
+            event.preventDefault();
+            searchMovies();
+        })
+    </script>
 </body>
 </html>
